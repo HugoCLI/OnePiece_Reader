@@ -21,7 +21,7 @@ console.log(' ');
 rl.question("Quel chapitre voulez-vous lire ? (Par exemple 637) : \n", function(number) {
     
     clearLine();
-    console.log(chalk.green("Recherche du chapitre "+number+" de One Piece version Française..."));
+    console.log(chalk.green("Recherche du "+chalk.cyan("Chapitre "+number+" de One Piece")+"..."));
     rl.close();
     let urlExists = require('url-exists');
     urlExists('https://one-piece-scan.fr/comic/'+number+'/01.jpg', function(err, exists) {
