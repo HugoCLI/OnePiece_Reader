@@ -2,30 +2,35 @@ let readline = require('readline');
 let rl = readline.createInterface({input: process.stdin, output: process.stdout });
 let request = require('request');
 const fs = require('fs');
-const chalk = require('chalk');
+let chalk = require('chalk');
 
 const formatBytes = (a, b = 2, k = 1024) => { with(Math) { let d = floor(log(a) / log(k)); return 0 == a ? "0b" : parseFloat((a / pow(k, d)).toFixed(max(0, b))) + " " + ["b", "Kb", "Mb", "Gb", "Tb", "Pb"][d] } }
 function clearLine() {
     for(let i = 0; i < 20; i++) /* => */ console.log(' ');
 }
 clearLine();
-console.log('-------------------- OnePiece Reader --------------------');
+console.log('-------------------- '+ chalk.green('OnePiece Reader')+' --------------------');
 console.log(' ');
-console.log(' Github : @HugoCLI ');
-console.log(' Site web : https://hugochilemme.com');
+console.log(' Github : '+chalk.yellow('@HugoCLI') + chalk.gray(" https://github.com/HugoCLI"));
+console.log(' Site web : '+chalk.cyan('https://hugochilemme.com'));
 console.log(' ');
 console.log('----------------------------------------------------------');
 console.log(' ');
 console.log(' ');
 
-rl.question("Quel chapitre voulez-vous lire ? (Par exemple 637) : ", function(number) {
-    // TODO: Log the answer in a database
+rl.question("Quel chapitre voulez-vous lire ? (Par exemple 637) : \n", function(number) {
+    
     clearLine();
-    console.log("Recherche du chapitre "+number+" de One Piece version Française");
+    console.log(chalk.green("Recherche du chapitre "+number+" de One Piece version Française..."));
     rl.close();
     let urlExists = require('url-exists');
     urlExists('https://one-piece-scan.fr/comic/'+number+'/01.jpg', function(err, exists) {
-        console.log("Téléchargement du chapitre "+number+"...");
+        console.log(chalk.yellow("Téléchargement du chapitre "+number+"..."));
+
+        if (!fs.existsSync('scans/OnePiece_'+number)){
+            fs.mkdirSync('scans/OnePiece_'+number, { recursive: true });
+        }
+
         console.log(' ');
         let page = 1;
 
@@ -51,7 +56,7 @@ rl.question("Quel chapitre voulez-vous lire ? (Par exemple 637) : ", function(nu
                 console.log(' ');
                 
                 if(data.headers['content-type'] == 'image/jpeg') {
-                    var out = fs.createWriteStream('scans/'+number+"_"+page+".jpg");
+                    var out = fs.createWriteStream('scans/OnePiece_'+number+"/"+page+".jpg");
                     req.pipe(out);
 
                     req.on('data', function (chunk) {
@@ -76,7 +81,7 @@ rl.question("Quel chapitre voulez-vous lire ? (Par exemple 637) : ", function(nu
 
                     });
                 } else {
-                    console.log('\t'+chalk.cyan("Fin de l\'opération") + " - "+(num-1)+" fichiers téléchargés vers "+ chalk.yellow(__dirname + "\\scans\\"+number+"_"));
+                    console.log('\t'+chalk.cyan("Fin de l\'opération") + " - "+(num-1)+" fichiers téléchargés vers "+ chalk.yellow(__dirname + "\\scans\\OnePiece_"+number+"\\"));
                     console.log(' ');
                 }
             });

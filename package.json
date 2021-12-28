@@ -1,0 +1,25 @@
+{
+  "name": "onepiece_reader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HugoCLI/OnePiece_Reader.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HugoCLI/OnePiece_Reader/issues"
+  },
+  "homepage": "https://github.com/HugoCLI/OnePiece_Reader#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "fs": "^0.0.1-security",
+    "readline": "^1.3.0",
+    "request": "^2.88.2"
+  }
+}
