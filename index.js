@@ -75,7 +75,7 @@ rl.question("Quel chapitre voulez-vous lire ? (Par exemple 637) : \n", function(
                     req.on('end', function (data) {
                         readline.moveCursor(process.stdout, 0, -1);
                         readline.clearLine(process.stdout, 1);
-                        console.log('\t' + chalk.green(number+"_"+page+".jpg") + ' (' + formatBytes(received_bytes) + '/' + formatBytes(total_bytes) + ')');
+                        console.log('\t' + chalk.green(number+"_"+page+".jpg") + ' (' + formatBytes(total_bytes) + ')');
                         num++;
                         download();
 
