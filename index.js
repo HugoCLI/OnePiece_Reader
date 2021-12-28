@@ -81,7 +81,7 @@ rl.question("Quel chapitre voulez-vous lire ? (Par exemple 637) : \n", function(
 
                     });
                 } else {
-                    console.log('\t'+chalk.cyan("Fin de l\'opération") + " - "+(num-1)+" fichiers téléchargés vers "+ chalk.yellow(__dirname + "\\scans\\OnePiece_"+number+"\\"));
+                    console.log('\t'+chalk.cyan("Chapitre "+number+" de One Piece") + " - "+(num-1)+" fichiers téléchargés "+ chalk.yellow(__dirname + "\\scans\\OnePiece_"+number+"\\"));
                     console.log(' ');
                 }
             });
