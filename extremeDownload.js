@@ -23,7 +23,13 @@ let rl = readline.createInterface({input: process.stdin, output: process.stdout 
 rl.question("Voulez-vous lancer le téléchargement de tout les chapitres ? (O)ui/(N)on : ", function(number) {
     if(number.toLowerCase() == 'o') {
         
-        startDownload();
+
+        rl.question("Voulez-vous lancer à un chapitre précis ? Saissez le chapitre (sinon appuyer sur entrer) ", function(chaps) {
+            if(chaps != "" && chaps >= 1) {
+                chap = chaps
+            }
+
+            startDownload();
         function startDownload() {
             let urlExists = require('url-exists');
             urlExists('https://one-piece-scan.fr/comic/'+chap+'/01.jpg', function(err, exists) {
@@ -88,6 +94,8 @@ rl.question("Voulez-vous lancer le téléchargement de tout les chapitres ? (O)u
                 }
             });
         }
+        });
+        
 
         
     } else {
