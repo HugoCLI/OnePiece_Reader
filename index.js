@@ -1,5 +1,4 @@
 let readline = require('readline');
-let rl = readline.createInterface({input: process.stdin, output: process.stdout });
 let request = require('request');
 const fs = require('fs');
 let chalk = require('chalk');
@@ -20,9 +19,9 @@ console.log(' ');
 
 start();
 function start() {
+    let rl = readline.createInterface({input: process.stdin, output: process.stdout });
     rl.question("Quel chapitre voulez-vous lire ? Saissisez un nombre (CTRL + C pour fermer) : ", function(number) {
         
-        clearLine();
         console.log(chalk.green("Recherche du "+chalk.cyan("Chapitre "+number+" de One Piece")+"..."));
         rl.close();
         let urlExists = require('url-exists');
