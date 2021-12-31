@@ -18,81 +18,86 @@ console.log('----------------------------------------------------------');
 console.log(' ');
 console.log(' ');
 
-rl.question("Quel chapitre voulez-vous lire ? (Par exemple 637) : \n", function(number) {
-    
-    clearLine();
-    console.log(chalk.green("Recherche du "+chalk.cyan("Chapitre "+number+" de One Piece")+"..."));
-    rl.close();
-    let urlExists = require('url-exists');
-    urlExists('https://one-piece-scan.fr/comic/'+number+'/01.jpg', function(err, exists) {
-        console.log(chalk.yellow("Téléchargement du chapitre "+number+"..."));
+start();
+function start() {
+    rl.question("Quel chapitre voulez-vous lire ? Saissisez un nombre (CTRL + C pour fermer) : ", function(number) {
+        
+        clearLine();
+        console.log(chalk.green("Recherche du "+chalk.cyan("Chapitre "+number+" de One Piece")+"..."));
+        rl.close();
+        let urlExists = require('url-exists');
+        urlExists('https://one-piece-scan.fr/comic/'+number+'/01.jpg', function(err, exists) {
+            console.log(chalk.yellow("Téléchargement du chapitre "+number+"..."));
 
-        if (!fs.existsSync('scans/OnePiece_'+number)){
-            fs.mkdirSync('scans/OnePiece_'+number, { recursive: true });
-        }
+            if (!fs.existsSync('scans/OnePiece_'+number)){
+                fs.mkdirSync('scans/OnePiece_'+number, { recursive: true });
+            }
 
-        console.log(' ');
-        let page = 1;
+            console.log(' ');
+            let page = 1;
 
 
 
-        let num = 1;
-        download();
-        function download() {
-            page = num;
-            if(num < 10) 
-                page = "0"+String(num);
+            let num = 1;
+            download();
+            function download() {
+                page = num;
+                if(num < 10) 
+                    page = "0"+String(num);
 
-            let received_bytes = 0;
-            let total_bytes = 0;
+                let received_bytes = 0;
+                let total_bytes = 0;
 
-            var req = request({
-                method: 'GET',
-                uri: 'https://one-piece-scan.fr/comic/'+number+'/'+page+'.jpg'
-            });
-            
-            req.on('response', function (data) {
-                total_bytes = parseInt(data.headers['content-length']);
-                console.log(' ');
+                var req = request({
+                    method: 'GET',
+                    uri: 'https://one-piece-scan.fr/comic/'+number+'/'+page+'.jpg'
+                });
                 
-                if(data.headers['content-type'] == 'image/jpeg') {
-                    var out = fs.createWriteStream('scans/OnePiece_'+number+"/"+page+".jpg");
-                    req.pipe(out);
-
-                    req.on('data', function (chunk) {
-                        // Update the received bytes
-                        received_bytes += chunk.length;
-            
-            
-                        let pourcent = 100 / total_bytes * received_bytes;
-                        readline.moveCursor(process.stdout, 0, -1);
-                        readline.clearLine(process.stdout, 1);
-                        console.log('\t' + chalk.gray(number+"_"+page+".jpg") + ' (' + formatBytes(received_bytes) + '/' + formatBytes(total_bytes) + ') - ' + pourcent.toFixed(0) + "%");
-                        
-                
-                    });
-
-                    req.on('end', function (data) {
-                        readline.moveCursor(process.stdout, 0, -1);
-                        readline.clearLine(process.stdout, 1);
-                        console.log('\t' + chalk.green(number+"_"+page+".jpg") + ' (' + formatBytes(total_bytes) + ')');
-                        num++;
-                        download();
-
-                    });
-                } else {
-                    console.log('\t'+chalk.cyan("Chapitre "+number+" de One Piece") + " - "+(num-1)+" fichiers téléchargés "+ chalk.yellow(__dirname + "\\scans\\OnePiece_"+number+"\\"));
+                req.on('response', function (data) {
+                    total_bytes = parseInt(data.headers['content-length']);
                     console.log(' ');
-                }
-            });
+                    
+                    if(data.headers['content-type'] == 'image/jpeg') {
+                        var out = fs.createWriteStream('scans/OnePiece_'+number+"/"+page+".jpg");
+                        req.pipe(out);
+
+                        req.on('data', function (chunk) {
+                            // Update the received bytes
+                            received_bytes += chunk.length;
+                
+                
+                            let pourcent = 100 / total_bytes * received_bytes;
+                            readline.moveCursor(process.stdout, 0, -1);
+                            readline.clearLine(process.stdout, 1);
+                            console.log('\t' + chalk.gray(number+"_"+page+".jpg") + ' (' + formatBytes(received_bytes) + '/' + formatBytes(total_bytes) + ') - ' + pourcent.toFixed(0) + "%");
+                            
+                    
+                        });
+
+                        req.on('end', function (data) {
+                            readline.moveCursor(process.stdout, 0, -1);
+                            readline.clearLine(process.stdout, 1);
+                            console.log('\t' + chalk.green(number+"_"+page+".jpg") + ' (' + formatBytes(total_bytes) + ')');
+                            num++;
+                            download();
+
+                        });
+                    } else {
+                        console.log('\t'+chalk.cyan("Chapitre "+number+" de One Piece") + " - "+(num-1)+" fichiers téléchargés "+ chalk.yellow(__dirname + "\\scans\\OnePiece_"+number+"\\"));
+                        console.log(' ');
+                        start();
+                    }
+                });
+                
+
+                
+            }
 
             
-        }
+        });
 
         
+        
     });
-
-    
-    
-});
+}
 
